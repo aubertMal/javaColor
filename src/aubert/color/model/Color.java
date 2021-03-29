@@ -24,8 +24,11 @@ public class Color {
         return green;
     }
 
-    public void setGreen(int green) {
-        this.green = green;
+    public void setGreen(int green) throws IllegalArgumentException{
+        if (green < 0 || green > 255)
+            throw new IllegalArgumentException("Le code vert est incorrect");
+        else
+            this.green = green;
     }
 
     public int getBlue() {
@@ -33,7 +36,10 @@ public class Color {
     }
 
     public void setBlue(int blue) {
-        this.blue = blue;
+        if (blue < 0 || blue > 255)
+            throw new IllegalArgumentException("Le code bleu est incorrect");
+        else
+            this.blue = blue;
     }
 
     public String getHexValue() {
@@ -49,6 +55,19 @@ public class Color {
     }
 
     public void setRed(int red) {
-        this.red = red;
+        if (red < 0 || red > 255)
+            throw new IllegalArgumentException("Le code rouge est incorrect");
+        else
+            this.red = red;
+    }
+
+    public String toString(String hexColorCode){
+        if (!hexColorCode.matches("#[a-fA-F0-9]{6}"))
+            throw new IllegalArgumentException("Le code couleur est incorrect");
+
+        int blueCode = Integer.parseInt(hexColorCode.substring(5, 7), 16);
+        int greenCode = Integer.parseInt(hexColorCode.substring(3, 5), 16);
+        int redCode = Integer.parseInt(hexColorCode.substring(1, 3), 16);
+        return "[value=" + hexColorCode + ", r=" + redCode + ", g=" + greenCode + ", b=" + blueCode + "]";
     }
 }
