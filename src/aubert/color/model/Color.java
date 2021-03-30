@@ -12,12 +12,16 @@ public class Color {
         this.red = red;
         this.green = green;
         this.blue = blue;
+        setHexValue("#"+(Integer.toHexString(red)+Integer.toHexString(green)+Integer.toHexString(blue)).toUpperCase());
     }
 
-    public Color(String hexColor) throws IllegalArgumentException{
-        if (!hexColor.matches("#[a-fA-F0-9]{6}"))
+    public Color(String hexColor) {
+        if (hexColor==null || !hexColor.matches("#[A-F0-9]{6}"))
             throw new IllegalArgumentException("Le code couleur est incorrect");
         this.hexValue = hexColor;
+        this.red = getRedFromHex(hexColor);
+        this.green = getGreenFromHex(hexColor);
+        this.blue = getBlueFromHex(hexColor);
     }
 
     public int getGreen() {
@@ -27,8 +31,10 @@ public class Color {
     public void setGreen(int green) throws IllegalArgumentException{
         if (green < 0 || green > 255)
             throw new IllegalArgumentException("Le code vert est incorrect");
-        else
+        else {
             this.green = green;
+            setHexValue("#"+this.hexValue.substring(1,3)+(Integer.toHexString(green).toUpperCase())+this.hexValue.substring(5,7));
+        }
     }
 
     public int getBlue() {
@@ -38,8 +44,10 @@ public class Color {
     public void setBlue(int blue) {
         if (blue < 0 || blue > 255)
             throw new IllegalArgumentException("Le code bleu est incorrect");
-        else
+        else {
             this.blue = blue;
+            setHexValue("#"+this.hexValue.substring(1,5)+(Integer.toHexString(blue).toUpperCase()));
+        }
     }
 
     public String getHexValue() {
@@ -47,7 +55,12 @@ public class Color {
     }
 
     public void setHexValue(String hexValue) {
+        if (hexValue == null || (!hexValue.matches("#[A-F0-9]{6}")))
+            throw new IllegalArgumentException("la valeur hexa est incorrecte");
         this.hexValue = hexValue;
+        this.red = getRedFromHex(hexValue);
+        this.green= getGreenFromHex(hexValue);
+        this.blue = getBlueFromHex(hexValue);
     }
 
     public int getRed() {
@@ -58,16 +71,28 @@ public class Color {
         if (red < 0 || red > 255)
             throw new IllegalArgumentException("Le code rouge est incorrect");
         else
+        {
             this.red = red;
+            setHexValue("#"+(Integer.toHexString(red).toUpperCase())+this.hexValue.substring(3,7));
+        }
     }
 
-    public String toString(String hexColorCode){
-        if (!hexColorCode.matches("#[a-fA-F0-9]{6}"))
-            throw new IllegalArgumentException("Le code couleur est incorrect");
+    public int getRedFromHex(String hexCode){
+        return Integer.parseInt(hexCode.substring(1, 3), 16);
+    }
 
-        int blueCode = Integer.parseInt(hexColorCode.substring(5, 7), 16);
-        int greenCode = Integer.parseInt(hexColorCode.substring(3, 5), 16);
-        int redCode = Integer.parseInt(hexColorCode.substring(1, 3), 16);
-        return "[value=" + hexColorCode + ", r=" + redCode + ", g=" + greenCode + ", b=" + blueCode + "]";
+    public int getGreenFromHex(String hexCode){
+        return Integer.parseInt(hexCode.substring(3, 5), 16);
+    }
+
+    public int getBlueFromHex(String hexCode){
+        return Integer.parseInt(hexCode.substring(5, 7), 16);
+    }
+
+    public String toString(){
+        String hexColorCode = this.hexValue;
+        if (!hexColorCode.matches("#[A-F0-9]{6}"))
+            throw new IllegalArgumentException("Le code couleur est incorrect");
+        return "[value=" + hexColorCode + ", r=" + getRedFromHex(hexColorCode) + ", g=" + getGreenFromHex(hexColorCode) + ", b=" + getBlueFromHex(hexColorCode) + "]";
     }
 }
